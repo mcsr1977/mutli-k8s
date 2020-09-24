@@ -5,11 +5,11 @@ env:
   global:
     - SHA=$(git rev-parse HEAD)
 before_install:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
+  - echo "$CONSE" | docker login -u "$CONUN" --password-stdin
+  - docker build -t mcsr1977/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run stephengrider/react-test npm test -- --coverage
+  - docker run mcsr1977/react-test npm test -- --coverage
 
 deploy:
   provider: script
