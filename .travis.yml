@@ -4,7 +4,16 @@ services:
 env:
   global:
     - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  - openssl aes-256-cbc -K $encrypted_83aff318845d_key -iv $encrypted_83aff318845d_iv -in csr-svc.json.enc -out csr-svc.json -d
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - gcloud auth activate-service-account --key-file csr-svc.json
+  - gcloud config set project more-cubs
+  - gcloud config set compute/zone us-central1-c
+  - gcloud container clusters get-credentials csr-cluster
   - echo "$CONSE" | docker login -u "$CONUN" --password-stdin
   - docker build -t mcsr1977/react-test -f ./client/Dockerfile.dev ./client
 
@@ -16,3 +25,5 @@ deploy:
   script: bash ./deploy.sh
   on:
     branch: master
+
+
